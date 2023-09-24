@@ -1,0 +1,60 @@
+/* App.css */
+
+/* Style the entire app container */
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+  min-height: 100vh; /* Minimum height of the viewport */
+}
+
+/* Style the center container */
+.center-container {
+  text-align: center;
+}
+
+
+/* Style the "Randomize" button */
+button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #ffffff;
+  color: #007bff;
+}
+
+/* Style the move count display */
+.move-count {
+  font-size: 24px; /* Increase the font size */
+  font-weight: bold; /* Make the text bold */
+  color: #333; /* Set the text color */
+  margin-bottom: 20px; /* Add some spacing below the move count */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Add a subtle text shadow */
+  align-items: center; /* Center horizontally */
+
+}
+
+/* Center the center-container using flexbox */
+.center-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+}
+
+.victory-message {
+  font-size: 24px;
+  font-weight: bold;
+  color: #007bff; /* Adjust the text color */
+  margin-top: 20px; /* Add spacing from the puzzle */
+}

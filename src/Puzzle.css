@@ -1,0 +1,40 @@
+/* Puzzle.css */
+
+/* Style the puzzle container */
+.puzzle {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Adjust the number of columns */
+    grid-gap: 10px; /* Adjust the gap between pieces */
+    margin: 0 auto;
+    width: min-content; /* Adjust the puzzle container width */
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    background-color: #f0f0f0; /* Match the background color of your web page */    
+  }
+  
+  /* Style individual puzzle pieces */
+  .piece {
+    width: 200px; /* Adjust the piece width */
+    height: 200px; /* Adjust the piece height */
+    background-size: 600px 600px; /* Match the total puzzle size */
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    border: 2px solid #ddd;
+    border-radius: 0; /* Ensure no rounded edges */
+  }
+  
+  .piece:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Styles for smaller screens */
+@media (max-width: 768px) {
+  .puzzle {
+    grid-template-columns: repeat(3, 1fr); /* Maintain a 3x3 grid */
+    grid-gap: 5px; /* Reduce the gap between pieces */
+    padding: 10px; /* Reduce the padding */
+  }
+  
+}
+  
