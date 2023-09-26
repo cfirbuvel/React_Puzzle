@@ -1,11 +1,11 @@
 import React from 'react';
+import './Puzzle.css';
 import Piece from './Piece';
-import './Puzzle.css'; // Import the CSS file
-
 
 const Puzzle = ({ image, pieces, handlePieceClick }) => {
-  // Calculate the piece width and height based on the grid size
-  const pieceSize = '15vw'; // Adjust the size as needed
+  // Calculate the piece width and height based on the screen size
+  const screenWidth = window.innerWidth;
+  const pieceSize = Math.min(screenWidth * 0.2, 200);
 
   return (
     <div className="puzzle">

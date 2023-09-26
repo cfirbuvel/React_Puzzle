@@ -2,8 +2,8 @@ import React from 'react';
 
 const Piece = ({ piece, width, height, handleClick }) => {
   const pieceStyle = {
-    width: `${width}`,
-    height: `${height}`,
+    width: `${width}px`,
+    height: `${height}px`,
     backgroundImage: `url(${piece.image})`,
     backgroundPosition: `-${piece.x * width}px -${piece.y * height}px`,
   };
@@ -13,7 +13,6 @@ const Piece = ({ piece, width, height, handleClick }) => {
       {/* Add any additional content or styles for the pieces */}
     </div>
   );
-  
 };
 
 export default Piece;
