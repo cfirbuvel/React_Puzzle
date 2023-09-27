@@ -80,6 +80,21 @@ function App() {
     }
   };
   
+   // Function to reset the puzzle
+   const resetPuzzle = () => {
+    // Reset move count to 0
+    resetMoveCount();
+
+    // Shuffle the initial pieces array
+    const shuffledPieces = shuffle(initialPieces);
+
+    // Update the state with the new shuffled pieces
+    setPieces(shuffledPieces);
+
+    // Reset victory status
+    setIsVictory(false);
+  };
+
   // Function to shuffle the pieces (similar to what we discussed earlier)
   const shufflePieces = () => {
     const shuffledPieces = shuffle(pieces);
@@ -91,14 +106,17 @@ function App() {
     <div className="App">
       {/* Display the victory message if `isVictory` is `true` */}
       {isVictory ? (
-        <div className="victory-message">Congratulations! You solved the puzzle!</div>
+        <div className="victory-message">Congratulations! You solved the puzzle!
+          <button onClick={resetPuzzle}>Restart Puzzle</button> {/* Add a button to reset the puzzle */}
+        </div>
       ) : (
         <div className="center-container">
           <div className="move-count">Moves: {moveCount}</div>
           <Puzzle image={imageUrl} pieces={pieces} handlePieceClick={handlePieceClick} />
+          <button onClick={shufflePieces}>Randomize</button>
         </div>
       )}
-      <button onClick={shufflePieces}>Randomize</button>
+      
     </div>
   );
 }
