@@ -5,11 +5,13 @@
   text-align: center;
   font-family: Arial, sans-serif;
   background-color: #f0f0f0;
-  padding: 20px;
+  padding: 4vw;
 }
 
 /* "Randomize" button Style */
 button {
+  font-size: 2vw; /* Adjust font size relative to viewport width */
+  font-weight: bold; /* Make the text bold */
   display: block;
   margin: 20px auto;
   padding: 10px 20px;

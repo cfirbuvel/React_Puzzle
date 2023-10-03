@@ -42,6 +42,9 @@ function App() {
     { image: '', x: 2, y: 2 }, // An empty piece
   ];
 
+  // Helper for solving puzzle quick
+  // const [pieces, setPieces] = useState(initialPieces);
+
   // Shuffle the initial pieces array
   const shuffledPieces = shuffle(initialPieces);
 
@@ -80,6 +83,23 @@ function App() {
     }
   };
   
+  // Define the winning levels
+  const levels = [
+    { name: 'Bronze', minMoves: 201, maxMoves: 999 },
+    { name: 'Silver', minMoves: 101, maxMoves: 200 },
+    { name: 'Gold', minMoves: 0, maxMoves: 100 },
+  ];
+
+  // Function to determine the user's rank based on the number of moves
+  const determineRank = () => {
+    for (const level of levels) {
+      if (moveCount >= level.minMoves && moveCount <= level.maxMoves) {
+        return level.name;
+      }
+    }
+    return 'No Rank'; // Default if none of the levels match
+  };
+
    // Function to reset the puzzle
    const resetPuzzle = () => {
     // Reset move count to 0
@@ -106,7 +126,8 @@ function App() {
     <div className="App">
       {/* Display the victory message if `isVictory` is `true` */}
       {isVictory ? (
-        <div className="victory-message">Congratulations! You solved the puzzle!
+        <div className="victory-message">Congratulations! You solved the puzzle in {moveCount} moves.
+          <div>Your Rank: {determineRank()}</div>
           <button onClick={resetPuzzle}>Restart Puzzle</button> {/* Add a button to reset the puzzle */}
         </div>
       ) : (

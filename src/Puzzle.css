@@ -4,23 +4,22 @@
 .puzzle {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* Adjust the piece width */
-    grid-gap: 3px; /* Adjust the gap between pieces */
+    grid-gap: 1px; /* Adjust the gap between pieces */
     margin: 0 auto;
     width: min-content; /* Adjust the width to fit the content (puzzle pieces) */
     background-color: white;
-    padding: 10px;
-    border-radius: 10px;
+    padding: .5vw;
+    border-radius: .5vw;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   }
   
   /* Style individual puzzle pieces */
   .piece {
-    width: min-content; /* Adjust the width to fit the content (puzzle pieces) */
-    height: min-content; /* Adjust the piece height */
-    background-size: 600px 600px; /* Match the total puzzle size */
+    width: 30vw; /* Set a fixed width using vw units */
+    height: 30vw; /* Set a fixed height using vw units */
+    background-size: 333% 333%; /* Set a fixed background size to cover the piece */
     cursor: pointer;
     transition: transform 0.3s ease;
-    border: 2px solid #ddd;
   }
   
   .piece:hover {
@@ -28,16 +27,14 @@
   }
 
   /* Media query for screens with a maximum width of 768px */
-@media (max-width: 768px) {
-  .puzzle {
-    grid-template-columns: repeat(3, 1fr); /* Change to a 2x2 grid for smaller screens */
-    grid-gap: 5px;
-    padding: 10px;
-  }
+  @media (max-width: 768px) {
+    .puzzle {
+      grid-template-columns: repeat(3, 1fr); 
+    }
 
-  /* Adjust piece size for smaller screens */
-  .piece {
-    width: 150px;
-    height: 150px;
+    /* Adjust piece size for smaller screens */
+    .piece {
+      width: 15vw;
+      height: 15vw;
+    }
   }
-}
