@@ -1,15 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import Puzzle from './Puzzle';
 import shuffle from 'lodash/shuffle'; 
 
+
 function App() {
   // Load the image
-  const imageUrl = process.env.PUBLIC_URL + '/image.jpg'; // Corrected path
-
+  const [imageUrl, setImageUrl] = useState(process.env.PUBLIC_URL + '/image.jpg'); 
   const [moveCount, setMoveCount] = useState(0);
+  const [isVictory, setIsVictory] = useState(false); 
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
 
-  const [isVictory, setIsVictory] = useState(false); // New state for victory status
+// Function to check the timer color
+const timerColorClass = useCallback(() => {
+  if (elapsedTime >= 0 && elapsedTime < 120) {
+    return 'green-timer'; // Dark green color for 0-2 minutes
+  } else if (elapsedTime >= 120 && elapsedTime < 300) {
+    return 'yellow-timer'; // Dark yellow color for 2-5 minutes
+  } else if (elapsedTime >= 300 && elapsedTime < 600) {
+    return 'red-timer'; // Dark red color for 5-10 minutes
+  }
+  return ''; // Default color
+}, [elapsedTime]);
+
+  // Effect to update the elapsed time
+useEffect(() => {
+  let intervalId;
+
+  // Start the timer when `isTimerRunning` is `true`
+  if (isTimerRunning) {
+    intervalId = setInterval(() => {
+      setElapsedTime((prevElapsedTime) => prevElapsedTime + 1);
+    }, 1000); // Update every second
+  } else {
+    clearInterval(intervalId);
+  }
+
+  // Clean up the interval on unmount or when `isTimerRunning` changes
+  return () => {
+    clearInterval(intervalId);
+  };
+}, [isTimerRunning, elapsedTime, timerColorClass]);
+
+// Effect to update the timer color class based on `elapsedTime`
+useEffect(() => {
+  const colorClass = timerColorClass();
+  const timerElement = document.querySelector('.timer');
+  if (timerElement) {
+    timerElement.className = `timer ${colorClass}`;
+  }
+}, [elapsedTime, timerColorClass]);
+
+
+  // Function to start the timer
+  const startTimer = () => {
+    setIsTimerRunning(true);
+  };
+
+  // Function to stop the timer
+  const stopTimer = () => {
+    setIsTimerRunning(false);
+  };
+
+  // Function to reset the timer
+  const resetTimer = () => {
+    setElapsedTime(0);
+  };
 
 
   // Function to reset the move count to 0
@@ -17,14 +74,31 @@ function App() {
     setMoveCount(0);
   };
 
+  // Function to format the elapsed time as "Xm Ys"
+  const formatTime = (timeInSeconds) => {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = Math.floor(timeInSeconds % 60);
+    
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+    return `${formattedMinutes}:${formattedSeconds}`;
+  };
+  
   // Function to check if the puzzle is solved
   const checkVictory = () => {
+    startTimer();
     const isSolved = pieces.every((piece, index) => {
       const correctPiece = initialPieces[index];
       return piece.x === correctPiece.x && piece.y === correctPiece.y;
     });
-  
+
+    if (isSolved && !isTimerRunning) {
+      stopTimer();
+      setIsVictory(true);
+    }
+
     if (isSolved) {
+      stopTimer();
       setIsVictory(true);
     }
   };
@@ -42,7 +116,7 @@ function App() {
     { image: '', x: 2, y: 2 }, // An empty piece
   ];
 
-  // Helper for solving puzzle quick
+  //Helper for solving the puzzle fast
   // const [pieces, setPieces] = useState(initialPieces);
 
   // Shuffle the initial pieces array
@@ -52,6 +126,11 @@ function App() {
 
   // Function to handle piece clicks
   const handlePieceClick = (clickedIndex) => {
+
+    // Start the timer when the user first clicks on the puzzle
+    if (!isTimerRunning) {
+      startTimer();
+    }
     // Find the index of the empty piece
     const emptyIndex = pieces.findIndex((piece) => piece.image === '');
   
@@ -85,7 +164,7 @@ function App() {
   
   // Define the winning levels
   const levels = [
-    { name: 'Bronze', minMoves: 201, maxMoves: 999 },
+    { name: 'Bronze', minMoves: 201, maxMoves: Infinity },
     { name: 'Silver', minMoves: 101, maxMoves: 200 },
     { name: 'Gold', minMoves: 0, maxMoves: 100 },
   ];
@@ -104,6 +183,7 @@ function App() {
    const resetPuzzle = () => {
     // Reset move count to 0
     resetMoveCount();
+    resetTimer();
 
     // Shuffle the initial pieces array
     const shuffledPieces = shuffle(initialPieces);
@@ -118,26 +198,65 @@ function App() {
   // Function to shuffle the pieces (similar to what we discussed earlier)
   const shufflePieces = () => {
     const shuffledPieces = shuffle(pieces);
+    resetTimer();
+    stopTimer();
     resetMoveCount();
     setPieces(shuffledPieces);
   };
 
-  return (
+  // Function to handle image upload
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        // Update the image URL and initialPieces with the new image
+        setImageUrl(e.target.result);
+        // Create a copy of initialPieces and update the image property for each piece
+        const updatedPieces = initialPieces.map((piece, index) => ({
+          ...piece,
+          image: e.target.result,
+          x: index % 3,
+          y: Math.floor(index / 3),
+        }));
+  
+        // Set the last piece as empty
+        updatedPieces[8].image = '';
+
+        // Shuffle the pieces
+        const shuffledPieces = shuffle(updatedPieces);
+
+         // Update the pieces state
+        setPieces(shuffledPieces);
+
+        setPieces(shuffledPieces);
+        // Reset move count when a new image is uploaded
+        resetMoveCount();
+        // Reset victory status
+        setIsVictory(false);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+return (
     <div className="App">
-      {/* Display the victory message if `isVictory` is `true` */}
       {isVictory ? (
-        <div className="victory-message">Congratulations! You solved the puzzle in {moveCount} moves.
+        <div className="victory-message">
+          Congratulations! You solved the puzzle in {moveCount} moves.
           <div>Your Rank: {determineRank()}</div>
-          <button onClick={resetPuzzle}>Restart Puzzle</button> {/* Add a button to reset the puzzle */}
+          <div className={`timer ${timerColorClass()}`}>{formatTime(elapsedTime)}</div>
+          <button onClick={resetPuzzle}>Restart Puzzle</button>
         </div>
       ) : (
         <div className="center-container">
+          <div className="timer">Time: {formatTime(elapsedTime)}</div> {/* Display the elapsed time */}
           <div className="move-count">Moves: {moveCount}</div>
           <Puzzle image={imageUrl} pieces={pieces} handlePieceClick={handlePieceClick} />
           <button onClick={shufflePieces}>Randomize</button>
+          <input type="file" accept="image/*" onChange={handleImageUpload} className="upload-button" />
         </div>
       )}
-      
     </div>
   );
 }

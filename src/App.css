@@ -43,3 +43,34 @@ button:hover {
   color: #007bff; /* Adjust the text color */
   margin-top: 20px; /* Add spacing from the puzzle */
 }
+
+
+.upload-button:hover {
+  background-color: #e7e7e7;
+  border-radius: 0px 15px 15px 0px;
+}
+
+/* Timer style */
+.timer {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 10px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  transition: color 1s; /* Add a color transition effect */
+}
+
+/* Custom timer colors */
+.green-timer {
+  color: darkgreen; /* Dark green color for 0-2 minutes */
+  transition: color 60s; /* Add the same transition effect */
+}
+
+.yellow-timer {
+  color: darkgoldenrod; /* Dark yellow color for 2-5 minutes */
+  transition: color 60s; /* Add the same transition effect */
+}
+
+.red-timer {
+  color: darkred; /* Dark red color for 5-10 minutes */
+  transition: color 60s; /* Add the same transition effect */
+}
